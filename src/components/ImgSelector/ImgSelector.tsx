@@ -1,12 +1,18 @@
 import React, { useState, useCallback } from "react";
-import { useDropzone } from 'react-dropzone';
+import { FileWithPath, useDropzone } from 'react-dropzone';
 
-const ImgSelector = () => {
-  const [file, setFile] = useState<File | null>(null);
+interface AcceptedFile extends File {
+  preview: string;
+}
 
-  const onDrop = useCallback((acceptedFiles) => {
+const ImgSelector: React.FC = () => {
+  const [file, setFile] = useState<AcceptedFile | null>(null);
+
+  const onDrop = useCallback((acceptedFiles: FileWithPath[]) => {
     if (acceptedFiles.length > 0) {
-      setFile(acceptedFiles[0]);
+      const fileWithPreview = acceptedFiles[0] as AcceptedFile;
+      fileWithPreview.preview = URL.createObjectURL(fileWithPreview);
+      setFile(fileWithPreview);
     }
   }, []);
 
@@ -37,7 +43,6 @@ const ImgSelector = () => {
   return (
     <div className="flex flex-col items-center justify-center h-screen">
       <form onSubmit={handleSubmit}>
-        {/* <input type="text" /> */}
         <div {...getRootProps()} className="container-dropzone">
           <input {...getInputProps()} type="file" accept="image/jpeg, image/png" />
           {isDragActive ?
