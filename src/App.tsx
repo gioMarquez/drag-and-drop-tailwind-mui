@@ -1,4 +1,4 @@
-import { ImageSelector2, ImgSelector } from "./components/ImgSelector"
+import { ImageSelector2 } from "./components/ImgSelector"
 
 const App = () => {
 
